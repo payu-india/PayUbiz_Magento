@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!-- 
+config.xml
+
+Copyright (c) 2011-2015 PayU India
+
+ 
+ * @author     Ayush Mittal
+ * @copyright  2011-2015 PayU India
+ * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
+ * @link       http://www.payu.in
+ * @category   PayUbiz
+ * @package    PayUbiz
+-->
+<config>
+	<modules>
+		<PayUbiz_PayUbiz>
+			<version>0.1.0</version>
+		</PayUbiz_PayUbiz>
+	</modules>
+	<global>
+		<blocks>
+			<payubiz>
+				<class>PayUbiz_PayUbiz_Block</class>
+			</payubiz>
+		</blocks>
+		<helpers>
+			<payubiz>
+				<class>PayUbiz_PayUbiz_Helper</class>
+			</payubiz>
+		</helpers>
+		<models>
+			<payubiz>
+				<class>PayUbiz_PayUbiz_Model</class>
+			</payubiz>
+		</models>
+		<resources>
+			<payubiz_setup>
+				<setup>
+					<module>PayUbiz_PayUbiz</module>
+				</setup>
+				<connection>
+					<use>core_setup</use>
+				</connection>
+			</payubiz_setup>
+			<newmodule_write>
+				<connection>
+					<use>core_write</use>
+				</connection>
+			</newmodule_write>
+			<newmodule_read>
+				<connection>
+					<use>core_read</use>
+				</connection>
+			</newmodule_read>
+		</resources>
+    </global>
+	
+	<frontend>
+		<routers>
+			<payubiz> 
+				<use>standard</use>
+				<args>
+					<module>PayUbiz_PayUbiz</module>
+					<frontName>payubiz</frontName>
+				</args>
+			</payubiz>
+		</routers>
+	</frontend>
+ 
+	<default>
+		<payment>
+			<payubiz>
+				<model>payubiz/standard</model>
+				<active>0</active>
+				<title><![CDATA[PayUbiz]]></title>
+				<server>test</server>
+				<debugging>0</debugging>
+			</payubiz>
+		</payment>
+	</default>
+</config>
