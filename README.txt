@@ -1,4 +1,4 @@
-PayUbiz Magento v1.9.x.x
+PayUbiz Magento v1.9.x 
 
 Copyright (c) 2011-2015 PayU india
 
