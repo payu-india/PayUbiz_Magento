@@ -139,8 +139,7 @@ class PayUbiz_PayUbiz_Model_Standard extends Mage_Payment_Model_Method_Abstract
         /**********************************************************************************/ 
 
         //$billingaddress = $customer->getPrimaryBillingAddress()->getData();    
-
-        $countryName = Mage::getModel('directory/country')->load($billingaddress['country_id'])->getName();
+        $countryName = Mage::getModel('directory/country')->load($order->getBillingAddress()->getData('country_id'))->getName();   
 
         if($currency_convertor != 0)
         {        
@@ -153,7 +152,7 @@ class PayUbiz_PayUbiz_Model_Standard extends Mage_Payment_Model_Method_Abstract
        } else {
          $calculatedAmount_INR = $this->getTotalAmount( $order ); 
        }
-        
+        $billingaddress = $order->getBillingAddress()->getData();
         // Construct data for the form
         $data = array(
             // Merchant details
@@ -181,9 +180,9 @@ class PayUbiz_PayUbiz_Model_Standard extends Mage_Payment_Model_Method_Abstract
            $data['Hash']         =   strtolower(hash('sha512', $merchant_key.'|'.$txnid.'|'.$data['amount'].'|'.
  $data['productinfo'].'|'.$data['firstname'].'|'.$data['email'].'|||||||||||'.$salt));   
 
-      if(PB_DEBUG) {
-        Mage::log('payubiz'.Zend_Debug::dump($data, null, false), null, 'payubiz.log');
-        }
+	/* if(PB_DEBUG) {
+	//Mage::log('payubiz'.Zend_Debug::dump($data, null, false), null, 'payubiz.log');
+	} */
         return( $data );
     }
 
@@ -198,7 +197,7 @@ class PayUbiz_PayUbiz_Model_Standard extends Mage_Payment_Model_Method_Abstract
     {     
            $order = Mage::getModel('sales/order');
 
- 
+		$debug_mode = 0;
 		$orderIncrementId = $this->getCheckout()->getLastRealOrderId();
 		$transaction_mode = $this->getConfigData('trans_mode');
         $txnid_magepayu = $orderIncrementId;       
@@ -278,7 +277,7 @@ class PayUbiz_PayUbiz_Model_Standard extends Mage_Payment_Model_Method_Abstract
 					 $order->loadByIncrementId($orderid);
 					   $order->setState(Mage_Sales_Model_Order::STATE_CANCELED, true);
 					  // Inventory updated 
-					   $order_id=$response['id'];
+					   $order_id=$response['txnid'];
 					   $this->updateInventory($order_id);
 					   $order->cancel()->save();
                     }else{
