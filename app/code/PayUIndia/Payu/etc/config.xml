@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <payu>
+                <model>PayUIndia\Payu\Model\Payu</model>
+                <title>PayUMoney</title>
+                <service_provider>payu_paisa</service_provider>
+                <production_url>https://secure.payu.in/_payment</production_url>
+                <sandbox_url>https://test.payu.in/_payment</sandbox_url>
+                <environment>sandbox</environment>
+                <account_type>payumoney</account_type>
+                <redirect_url>payu/standard/redirect</redirect_url>
+                <return_url>payu/standard/response</return_url>
+                <cancel_url>payu/standard/cancel</cancel_url>
+                <merchant_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <salt backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+            </payu>
+        </payment>
+    </default>
+</config>
