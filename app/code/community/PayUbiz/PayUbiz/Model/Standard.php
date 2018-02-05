@@ -241,7 +241,7 @@ class PayUbiz_PayUbiz_Model_Standard extends Mage_Payment_Model_Method_Abstract
                 $sentHashString = strtolower(hash('sha512', $saltString));
                  $responseHashString=$_REQUEST['hash'];
  
-                if(($sentHashString==$responseHashString) && ($amount==$response['amount']))
+                if(($sentHashString==$response['hash']) && ($amount==$response['amount']))
                 {
                         $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true);
 						
