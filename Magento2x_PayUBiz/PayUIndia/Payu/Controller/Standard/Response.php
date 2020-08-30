@@ -11,11 +11,10 @@ class Response extends \PayUIndia\Payu\Controller\PayuAbstract {
             $paymentMethod = $this->getPaymentMethod();
             $params = $this->getRequest()->getParams();
             $orderId = $paymentMethod->getDecryptOrderId($params["uniqId"]);
+            $order = $this->getOrder($orderId);
 
-            if ($paymentMethod->validateResponse($params)) {
-
+            if (!empty($orderId) && $paymentMethod->validateResponse($params, $order)) {
                 $returnUrl = $this->getCheckoutHelper()->getUrl('checkout/onepage/success');
-                $order = $this->getOrder($orderId);
                 $payment = $order->getPayment();
                 $paymentMethod->postProcessing($order, $payment, $params);
             } else {
