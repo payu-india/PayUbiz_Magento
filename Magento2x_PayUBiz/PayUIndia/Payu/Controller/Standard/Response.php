@@ -11,13 +11,17 @@ class Response extends \PayUIndia\Payu\Controller\PayuAbstract {
             $paymentMethod = $this->getPaymentMethod();
             $params = $this->getRequest()->getParams();
             $orderId = $paymentMethod->getDecryptOrderId($params["uniqId"]);
-            $order = $this->getOrder($orderId);
-
-            if (!empty($orderId) && $paymentMethod->validateResponse($params, $order)) {
+            $result = false;
+            if ($paymentMethod->validateResponse($params)  && $orderId == $params["productinfo"]) {
                 $returnUrl = $this->getCheckoutHelper()->getUrl('checkout/onepage/success');
+                $order = $this->getOrder($orderId);
                 $payment = $order->getPayment();
-                $paymentMethod->postProcessing($order, $payment, $params);
-            } else {
+                if($params["amount"] == round($order->getBaseGrandTotal(), 2)){;
+                    $paymentMethod->postProcessing($order, $payment, $params);
+                    $result =  true;
+                }
+            }
+            if($result == false){
                 $this->messageManager->addErrorMessage(__('Payment failed. Please try again or choose a different payment method'));
                 $returnUrl = $this->getCheckoutHelper()->getUrl('checkout/onepage/failure');
             }

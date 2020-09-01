@@ -129,7 +129,6 @@ class Payu extends \Magento\Payment\Model\Method\AbstractMethod {
         $params["zip"]                  = $billing_address->getPostcode();
         $params["country"]              = $billing_address->getCountryId();
         $params["email"] = $order->getCustomerEmail();
-        $params["udf3"] = $this->checkoutSession->getLastRealOrderId();
         $params["udf5"] = 'Magento_v.2.1.3';
         $params["phone"] = $billing_address->getTelephone();
         $params["curl"] = $this->getCancelUrl()."?uniqId=".$encryptOrderId;
@@ -188,7 +187,7 @@ class Payu extends \Magento\Payment\Model\Method\AbstractMethod {
     }
 
     //validate response
-    public function validateResponse($returnParams, \Magento\Sales\Model\Order $order) {
+    public function validateResponse($returnParams) {
         if ($returnParams['status'] == 'pending' || $returnParams['status'] == 'failure') {
             return false;
         }
@@ -214,8 +213,6 @@ class Payu extends \Magento\Payment\Model\Method\AbstractMethod {
 		 	$Udf10 = $returnParams['udf10'];
 			
 			$keyString =  $this->getConfigData("merchant_key").'|'.$txnid.'|'.$amount.'|'.$productinfo.'|'.$firstname.'|'.$email.'|'.$Udf1.'|'.$Udf2.'|'.$Udf3.'|'.$Udf4.'|'.$Udf5.'|'.$Udf6.'|'.$Udf7.'|'.$Udf8.'|'.$Udf9.'|'.$Udf10;
-            $amountChecked = ($amount == round($order->getBaseGrandTotal(), 2));
-            $orderIdChecked = ($Udf3 == $order->getId());
 			$keyArray = explode("|",$keyString);
 			$reverseKeyArray = array_reverse($keyArray);
 			$reverseKeyString=implode("|",$reverseKeyArray);			 
@@ -226,7 +223,7 @@ class Payu extends \Magento\Payment\Model\Method\AbstractMethod {
 			if($sentHashString != $returnParams['hash'])
 				return false;
 			else
-                return $amountChecked && $orderIdChecked;
+                return true;
 		}
         return false;
     }
