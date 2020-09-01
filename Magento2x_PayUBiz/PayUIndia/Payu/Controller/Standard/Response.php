@@ -12,7 +12,7 @@ class Response extends \PayUIndia\Payu\Controller\PayuAbstract {
             $params = $this->getRequest()->getParams();
             $orderId = $paymentMethod->getDecryptOrderId($params["uniqId"]);
             $result = false;
-            if ($paymentMethod->validateResponse($params)  && $orderId == $params["productinfo"]) {
+            if ($orderId == $params["productinfo"] && $paymentMethod->validateResponse($params)) {
                 $returnUrl = $this->getCheckoutHelper()->getUrl('checkout/onepage/success');
                 $order = $this->getOrder($orderId);
                 $payment = $order->getPayment();
