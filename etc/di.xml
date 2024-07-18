@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">    
+	<preference for="Magento\Framework\Session\Config\ConfigInterface" type="PayUIndia\Payu\Session\CustomConfig"/>
+	<type name="Magento\Framework\App\Request\CsrfValidator">
+        <plugin name="csrf_validator_skip" type="PayUIndia\Payu\Plugin\CsrfValidatorSkip" />
+    </type>
+</config>

@@ -1,0 +1,14 @@
+<?php
+$blockObj= $block->getLayout()->createBlock('PayUIndia\Payu\Block\Cart'); 
+$paymentMethod = $blockObj->getConfig('payment/payu/paymentaction');
+if($paymentMethod == 'bolt'):
+
+	$boltendpoint = 'https://apitest.payu.in/js-sdks/bolt.min.js';			
+	$env = $blockObj->getConfig('payment/payu/environment');
+	if ($env === 'production') {
+		$boltendpoint = 'https://api.payu.in/js-sdks/bolt.min.js';
+	}
+	
+?>
+<script type='text/javascript' src="<?php echo $boltendpoint; ?>"></script>
+<?php endif; ?>

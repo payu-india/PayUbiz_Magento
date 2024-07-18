@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="payu" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>PayU</label>
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+				<field id="paymentaction" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+					<label>Payment Type</label>
+					<source_model>PayUIndia\Payu\Model\Action</source_model>
+					<config_path>payment/payu/paymentaction</config_path>
+				</field>
+				
+				<field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
+					<label>Payment Action</label>
+					<config_path>payment/payu/payment_action</config_path>
+					<source_model>PayUIndia\Payu\Model\PaymentAction</source_model>
+					<attribute type="shared">1</attribute>
+				</field>
+            
+				<field id="uniquetxnid" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Custom Transaction ID</label>
+					<comment>Enabling this will append unique value along with system generated order id. The same will not be stored. Useful for testing only.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<config_path>payment/payu/uniquetxnid</config_path>
+                </field>
+				<field id="orderemail" translate="label" type="select" sortOrder="32" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Send Order Email</label>
+					<comment>Send new order email notification to customer after receiving payment. Read module installation notes for configuring default Magento email notifications.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<config_path>payment/payu/orderemail</config_path>
+                </field>
+				<field id="generateinvoice" translate="label" type="select" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Generate Invoice</label>
+					<comment>Generate Invoice after receiving payment.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<config_path>payment/payu/generateinvoice</config_path>
+                </field>
+				<field id="invoiceemail" translate="label" type="select" sortOrder="36" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Send Invoice Email</label>
+					<comment>Send generated Invoice Email notification to customer. This feature will work only if Generate Invoice feature is enabled.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<config_path>payment/payu/invoiceemail</config_path>
+                </field>
+                <field id="account_type" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Account Type</label>
+                    <source_model>PayUIndia\Payu\Model\Account</source_model>
+                    <config_path>payment/payu/account_type</config_path>
+                </field>
+                <field id="title" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Title</label>
+                </field>
+                <field id="environment" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Environment</label>
+                    <source_model>PayUIndia\Payu\Model\Environment</source_model>
+                    <config_path>payment/payu/environment</config_path>
+                </field>
+                <field id="merchant_key" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Merchant Key</label>
+					<validate>required-entry</validate>
+					<config_path>payment/payu/merchant_key</config_path>
+                </field>
+                <field id="salt" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Salt Key</label>
+					<validate>required-entry</validate>
+                    <config_path>payment/payu/salt</config_path>
+                </field>
+				<field id="verifypayment" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enable Payment Verification</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+				<field id="debuglog" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enable Debug Log</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

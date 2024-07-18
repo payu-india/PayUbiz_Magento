@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+    <policies>
+        <policy id="script-src">
+            <values>
+                <value id="scriptsrc" type="host">*.payu.in</value>				
+            </values>
+        </policy>
+        <policy id="connect-src">
+            <values>
+                <value id="cntsrc" type="host">*.payu.in</value>				
+            </values>
+        </policy>
+		<policy id="frame-ancestors">
+            <values>
+                <value id="self" type="host">'self' data:</value>	
+				<value id="payu" type="host">*.payu.in</value>				
+				<value id="fb" type="host">*.facebook.com</value>
+				<value id="fly" type="host">*.flydubai.com</value>
+				<value id="shp" type="host">*.myshopify.com</value>
+            </values>
+        </policy>
+		<policy id="frame-src">
+            <values>
+                <value id="dta" type="host">'self' data:</value>	
+				<value id="frmesrc" type="host">*.payu.in</value>				
+				<value id="dta5" type="host">*.facebook.com</value>
+				<value id="dta6" type="host">*.flydubai.com</value>				
+				<value id="shp7" type="host">*.myshopify.com</value>
+            </values>
+        </policy>		
+		<policy id="form-action">
+            <values>
+                <value id="fra" type="host">'self' data:</value>
+				<value id="frmact" type="host">*.payu.in</value>				
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>

@@ -1,0 +1,28 @@
+type StoreConfig @doc(description: "The type contains information about a store config") {
+    merchant_key: String @doc(description: "PayU Merchant Key")
+    merchant_salt: String @doc(description: "PayU Merchant Salt")
+}
+
+type Mutation {
+	setPayuPaymentDetailsOnCart(input: SetPayuPaymentDetailsOnCartInput) : SetPayuPaymentDetailsOnCartOutput @resolver(class: "PayUIndia\\Payu\\Model\\Resolver\\SetPayuPaymentDetailsOnCart")
+	placePayuOrder (cart_id: String @doc(description: "cart_id to generate Payment.")) : PayuOrder @resolver( class: "PayUIndia\\Payu\\Model\\Resolver\\PlacePayuOrder") @doc(description: "Place PayU Order with cart amount and currency to generate payment.")
+}
+
+type PayuOrder {
+	success: Boolean!
+	payu_payment_id: String
+	order_quote_id: String
+	amount: String
+	currency: String
+	message: String
+}
+
+input SetPayuPaymentDetailsOnCartInput {
+	cart_id: String!
+	payu_payment_id: String!	
+}
+
+type SetPayuPaymentDetailsOnCartOutput {
+    cart: Cart!
+}
+
