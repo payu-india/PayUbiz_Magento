@@ -10,6 +10,7 @@ class Payu extends \Magento\Payment\Model\Method\AbstractMethod {
     const PAYMENT_PAYU_CODE = 'payu';
     const ACC_BIZ = 'payubiz';
     const ACC_MONEY = 'payumoney';
+    const IV_DEFAULT = "0000000000000000";
 
     protected $_code = self::PAYMENT_PAYU_CODE;
 
@@ -112,7 +113,7 @@ class Payu extends \Magento\Payment\Model\Method\AbstractMethod {
     public function buildCheckoutRequest() {
         $order = $this->checkoutSession->getLastRealOrder();
         $billing_address = $order->getBillingAddress();
-
+        $encryptOrderId = $this->getEncryptedOrderId();
         $params = array();
         $params["key"] = $this->getConfigData("merchant_key");
         if ($this->getConfigData('account_type') == self::ACC_MONEY) {
@@ -128,17 +129,35 @@ class Payu extends \Magento\Payment\Model\Method\AbstractMethod {
         $params["zip"]                  = $billing_address->getPostcode();
         $params["country"]              = $billing_address->getCountryId();
         $params["email"] = $order->getCustomerEmail();
-		$params["udf5"] = 'Magento_v.2.1.3';
+        $params["udf5"] = 'Magento_v.2.1.3';
         $params["phone"] = $billing_address->getTelephone();
-        $params["curl"] = $this->getCancelUrl();
-        $params["furl"] = $this->getReturnUrl();
-        $params["surl"] = $this->getReturnUrl();
+        $params["curl"] = $this->getCancelUrl()."?uniqId=".$encryptOrderId;
+        $params["furl"] = $this->getReturnUrl()."?uniqId=".$encryptOrderId;
+        $params["surl"] = $this->getReturnUrl()."?uniqId=".$encryptOrderId;
 
         $params["hash"] = $this->generatePayuHash($params['txnid'],
                 $params['amount'], $params['productinfo'], $params['firstname'],
                 $params['email'],$params["udf5"]);
 
         return $params;
+    }
+
+    private function getEncryptedOrderId(){
+        $orderId = $this->checkoutSession->getLastRealOrderId() . '@' . rand(0, 1000000);
+        $encryption_key = openssl_digest($this->getConfigData('salt'), "MD5", TRUE);
+        return bin2hex(openssl_encrypt($orderId, 'AES-128-CBC', $encryption_key, OPENSSL_RAW_DATA, $this->getIvValue()));
+    }
+
+    public function getDecryptOrderId($encryptOrderId){
+        $encryption_key = openssl_digest($this->getConfigData('salt'), "MD5", TRUE);
+        $decryptedText = openssl_decrypt(hex2bin($encryptOrderId), 'AES-128-CBC', $encryption_key, OPENSSL_RAW_DATA,$this->getIvValue());
+        $parts = explode('@',$decryptedText);
+        return $parts[0];
+    }
+
+    private function getIvValue(){
+        $configVal =  $this->getConfigData('iv_value');
+        return (strlen(trim($configVal))!=16) ? self::IV_DEFAULT : $configVal;
     }
 
     public function generatePayuHash($txnid, $amount, $productInfo, $name,
@@ -194,7 +213,6 @@ class Payu extends \Magento\Payment\Model\Method\AbstractMethod {
 		 	$Udf10 = $returnParams['udf10'];
 			
 			$keyString =  $this->getConfigData("merchant_key").'|'.$txnid.'|'.$amount.'|'.$productinfo.'|'.$firstname.'|'.$email.'|'.$Udf1.'|'.$Udf2.'|'.$Udf3.'|'.$Udf4.'|'.$Udf5.'|'.$Udf6.'|'.$Udf7.'|'.$Udf8.'|'.$Udf9.'|'.$Udf10;
-		  
 			$keyArray = explode("|",$keyString);
 			$reverseKeyArray = array_reverse($keyArray);
 			$reverseKeyString=implode("|",$reverseKeyArray);			 
@@ -205,7 +223,7 @@ class Payu extends \Magento\Payment\Model\Method\AbstractMethod {
 			if($sentHashString != $returnParams['hash'])
 				return false;
 			else
-				return true;
+                return true;
 		}
         return false;
     }
