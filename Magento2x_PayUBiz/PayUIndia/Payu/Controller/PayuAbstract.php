@@ -128,12 +128,13 @@ abstract class PayuAbstract extends \Magento\Framework\App\Action\Action
     /**
      * Get order object
      *
+     * @param $orderId
      * @return \Magento\Sales\Model\Order
      */
-    protected function getOrder()
+    protected function getOrder($orderId)
     {
         return $this->_orderFactory->create()->loadByIncrementId(
-            $this->_checkoutSession->getLastRealOrderId()
+            $orderId
         );
     }
 
